@@ -3,30 +3,35 @@ import { Platform, Linking } from 'react-native'
 const isString = (str) => Object.prototype.toString.call(str) === '[object String]'
 const isBool = (bool) => Object.prototype.toString.call(bool) === '[object Boolean]'
 
-const createError = (msg = '') => Promise.reject(new Error(msg))
-
-const openLink = (url, cb) => {
-  return Linking.canOpenURL(url).then(canOpen => {
+const openLink = async (url) => {
+  try {
+    const canOpen = await Linking.canOpenURL(url);
     if (!canOpen) {
-      return createError(`invalid URL provided: ${url}`)
+      return Promise.reject(`invalid URL provided: ${url}`);
     } else {
-      return Linking.openURL(url).catch((err) => Promise.reject(err))
+      await Linking.openURL(url);
     }
-  })
+  } catch (err) {
+    return Promise.reject(err);
+  }
 }
 
-const call = (args = {}) => {
-  const settings = Object.assign({
-    prompt: true
-  }, args)
+const viber = async (args = {}) => {
 
-  if (!settings.number) { return createError('no number provided') }
-  if (!isString(settings.number)) { return createError('number should be string') }
-  if (!isBool(settings.prompt)) { return createError('prompt should be bool') }
+  if (!args.number) { return Promise.reject('no number provided') }
+  if (!isString(args.number)) { return Promise.reject('number should be string') }
 
-  const url = `${Platform.OS === 'ios' && settings.prompt ? 'telprompt:' : 'tel:'}${settings.number}`
+  const url = `viber://add?number=${args.number}`;
 
-  return openLink(url)
+  try {
+    await openLink(url);
+  } catch(err) {
+    const urlMarket = Platform.OS === 'ios'
+      ? `itms-apps://itunes.apple.com/us/app/id382617920?mt=8`
+      : `market://details?id=com.viber.voip`;
+    return await openLink(urlMarket);
+  }
+  return;
 }
 
-export default call
+export default viber;
