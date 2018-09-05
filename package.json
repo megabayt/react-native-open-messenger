@@ -1,10 +1,10 @@
 {
-  "name": "react-native-open-viber",
+  "name": "react-native-open-messenger",
   "version": "1.0.8",
   "description": "Open a viber app in React Native",
   "main": "index.js",
   "repository": {
-    "url": "https://github.com/megabayt/react-native-open-viber.git",
+    "url": "https://github.com/megabayt/react-native-open-messenger.git",
     "type": "git"
   },
   "scripts": {
