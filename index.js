@@ -30,7 +30,7 @@ export const openWhatsapp = async (args = {}) => {
   if (!isString(args.number)) { return Promise.reject('number should be string') }
 
   return await openApp(
-    `https://api.whatsapp.com/send?phone=+${args.number}`,
+    `https://api.whatsapp.com/send?phone=${args.number}`,
     'itms-apps://itunes.apple.com/us/app/id310633997?mt=8',
     'market://details?id=com.whatsapp'
   );
